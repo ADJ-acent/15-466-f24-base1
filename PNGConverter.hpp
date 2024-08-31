@@ -24,7 +24,7 @@ struct PNGConverter {
             std::cout<< "bit0: " << std::endl;
             for (int i = 0; i < 8; i++) {
                 std::cout<< std::bitset<8>(bit0[i]) << std::endl;
-            }
+            } 
             std::cout<< "bit1: " << std::endl;
             for (int i = 0; i < 8; i++) {
                 std::cout<< std::bitset<8>(bit1[i]) << std::endl;
@@ -32,8 +32,13 @@ struct PNGConverter {
         }
     };
 
-    void generate_tile_data_files(std::vector<SavedTile> &tiles, std::string tile_name);
-    
+    struct SavedPalette {
+        uint8_t color[4][4];
+    };
+
+    void generate_tile_data_files(std::vector<SavedTile> &tiles, std::string tile_name);    
     void load_tile_data_files(std::string file_location, std::vector<SavedTile>& out_tiles);
+
+    void generate_palette_data_files(std::vector<SavedPalette>);
 
 };
