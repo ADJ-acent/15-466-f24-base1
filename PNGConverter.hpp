@@ -2,6 +2,8 @@
 
 #include <string>
 #include <vector>
+#include <bitset>
+#include <iostream>
 
 struct PNGConverter {
     PNGConverter(std::string save_file_path) : asset_root(save_file_path){};
@@ -12,12 +14,26 @@ struct PNGConverter {
 
     void convert_pngs_to_assets(std::string png_folder);
 
-    struct SingleTile {
-            std::vector<uint8_t> bit0;
-            std::vector<uint8_t> bit1;
+    struct SavedTile {
+        uint8_t row, col, palette;
+        uint8_t bit0[8];
+        uint8_t bit1[8];
+
+        void print(){
+            std::cout<< "row: " << uint32_t(row) << "col: " << uint32_t(col) << "palette_index: " << uint32_t(palette) << std::endl;
+            std::cout<< "bit0: " << std::endl;
+            for (int i = 0; i < 8; i++) {
+                std::cout<< std::bitset<8>(bit0[i]) << std::endl;
+            }
+            std::cout<< "bit1: " << std::endl;
+            for (int i = 0; i < 8; i++) {
+                std::cout<< std::bitset<8>(bit1[i]) << std::endl;
+            }
+        }
     };
 
-    void generate_tile_data_file(std::vector<SingleTile> &sprites, std::string sprite_name, 
-        uint8_t x_sprite_count, uint8_t y_sprite_count, uint8_t pallet_index);
+    void generate_tile_data_files(std::vector<SavedTile> &tiles, std::string tile_name);
+    
+    void load_tile_data_files(std::string file_location, std::vector<SavedTile>& out_tiles);
 
 };

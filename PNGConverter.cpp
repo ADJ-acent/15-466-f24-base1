@@ -5,7 +5,7 @@
 
 #include <filesystem>
 #include <fstream>
-#include <bitset>
+
 
 
 
@@ -38,13 +38,18 @@ void PNGConverter::convert_pngs_to_assets(std::string png_folder)
             uint16_t tile_col = 0;
             uint16_t row = 0;
             uint16_t tile_index = 0;
+
+            struct SingleTile {
+                std::vector<uint8_t> bit0;
+                std::vector<uint8_t> bit1;
+            };
             
-
-
             std::vector<SingleTile> tiles(total_tiles_count);
 
-            for (uint32_t i = 0; i < data.size(); i += tile_dimension){
-                
+            // fill tiles with single tiles' color info
+            
+            for (uint32_t i = 0; i < size.x * size.y; i += tile_dimension){
+                assert(tile_index < total_tiles_count);
                 // pack the entire tile row into two uint8
                 uint8_t curr_tile_row_bit0 = 0;
                 uint8_t curr_tile_row_bit1 = 0;
@@ -74,6 +79,9 @@ void PNGConverter::convert_pngs_to_assets(std::string png_folder)
                 tiles[tile_index].bit0.push_back(curr_tile_row_bit0);
                 tiles[tile_index].bit1.push_back(curr_tile_row_bit1);
 
+                assert(tiles[tile_index].bit0.size() <= 8);
+                assert(tiles[tile_index].bit1.size() <= 8);
+
                 // update indices
                 tile_col++;
                 tile_index++;
@@ -82,72 +90,64 @@ void PNGConverter::convert_pngs_to_assets(std::string png_folder)
                     tile_col = 0;
                     row++;
                     // we are staying at the same tile row
-                    if (row != tile_dimension) {
+                    if (row % tile_dimension != 0) {
                         tile_index -= x_tile_count;
                     }
                 }
 
             }
-            // for (SingleTile tile : tiles){
-            //     for (int i = 0; i < tile.bit0.size(); i++){
-            //         std::bitset<8> bit0(tile.bit0[ i ]);
-            //         std::bitset<8> bit1(tile.bit1[ i ]);
-            //         std::cout<< bit0 << " " << bit1 << std::endl;
-            //     }
-            // }
+
+            std::vector<SavedTile> saved_tiles;
+            for (uint16_t i = 0; i < uint16_t(tiles.size()); ++i){
+                SavedTile cur_saved_tile;
+                SingleTile read_tile = tiles[i];
+                cur_saved_tile.row = uint8_t(i / x_tile_count);
+                cur_saved_tile.col = uint8_t(i % x_tile_count);
+                //TODO: actually assign a pallet
+                cur_saved_tile.palette = 1;
+                assert(read_tile.bit0.size() == 8);
+                assert(read_tile.bit1.size() == 8);
+                std::copy(read_tile.bit0.begin(), read_tile.bit0.end(), cur_saved_tile.bit0);
+                std::copy(read_tile.bit1.begin(), read_tile.bit1.end(), cur_saved_tile.bit1);
+
+                saved_tiles.push_back(cur_saved_tile);
+            }
+            
+
+
             for (auto color : seen_colors){
                 std::cout<< uint32_t(color.x) << " "<<uint32_t(color.y) << " " << uint32_t(color.z) << " "<< uint32_t(color.w)  << std::endl;
             }
             
-            generate_tile_data_file(tiles, tile_name, uint8_t(x_tile_count), uint8_t(y_tile_count), 3);
+            generate_tile_data_files(saved_tiles, tile_name);
         }
+
     }
-    
+    //std::vector<SavedTile> out;
+    //load_tile_data_files("C:/Users/andyj/OneDrive/Desktop/Github/GameProgramming/15-466-f24-base1/dist/assets/tiles/HamsterIdle.tile", out);
     return;
 }
 
-void PNGConverter::generate_tile_data_file(std::vector<SingleTile> &tiles, std::string tile_name,
-     uint8_t x_tile_count, uint8_t y_tile_count, uint8_t pallet_index)
+void PNGConverter::generate_tile_data_files(std::vector<SavedTile> &tiles, std::string tile_name)
 {
     assert(asset_root != std::string()); // shouldn't be uninitialized
     assert(tiles.size() < size_t(64)); // can only have 64 total tiles
-    assert(tiles.size() == x_tile_count * y_tile_count);
     static std::string tile_root = asset_root + "/" + "tiles";
-    std::string tile_directory = tile_root;
-    uint32_t tile_count = uint32_t(tiles.size());
-    bool is_single_tile = tile_count == 1;
-    if (!is_single_tile) {
-        tile_directory = asset_root + "/" + tile_name;
-        std::filesystem::create_directory(tile_directory);
+
+    std::string tile_path = tile_root + "/" + tile_name + ".tile";
+    std::ofstream tile_file(tile_path);
+    write_chunk("TILE", tiles, &tile_file);
+    tile_file.close();
+    std::vector<SavedTile> out_tiles;
+    load_tile_data_files(tile_path, out_tiles);
+}
+
+void PNGConverter::load_tile_data_files(std::string tile_path, std::vector<SavedTile>& out_tiles)
+{
+    std::ifstream tile_file(tile_path, std::ios::binary);
+    read_chunk(tile_file, "TILE", &out_tiles);
+    for (auto saved : out_tiles){
+        saved.print();
     }
-    for (uint8_t i = 0; i < x_tile_count; ++i){
-        for (uint8_t j = 0; j < y_tile_count; ++j){
-            SingleTile tile = tiles[i * x_tile_count + j];
-            /* position info row contains the current row and column of the tile
-                x x x x         x x x x 
-                --row--      --column--
-
-                pallet info row contains the pallet index
-                these rows are stored in the first two rows of bit 0
-            */
-            tile.bit0.insert(tile.bit0.begin(), pallet_index);
-            uint8_t position_info_row = ((i << 4) | j);
-            tile.bit0.insert(tile.bit0.begin(), position_info_row);
-            std::ofstream bit0_file(tile_directory + "/" + tile_name + "_" + std::to_string(i * x_tile_count + j) + "_" + "bit0");
-            std::ofstream bit1_file(tile_directory + "/" + tile_name + "_" + std::to_string(i * x_tile_count + j) + "_" + "bit1");
-            write_chunk("BIT0", tile.bit0, &bit0_file);
-            write_chunk("BIT1", tile.bit1, &bit1_file);
-            bit0_file.close();
-
-
-            std::ifstream bit0_file_i(tile_directory + "/" + tile_name + "_" + std::to_string(i * x_tile_count + j) + "_" + "bit0", std::ios::binary);
-            std::cout<< tile_directory + "/" + tile_name + "_" + std::to_string(i * x_tile_count + j) + "_" + "bit0"<< std::endl;
-            std::vector<uint8_t> bit0;
-            read_chunk(bit0_file_i, "BIT0", &bit0);
-            // for (int k = 0; k < bit0.size(); ++k) {
-            //     std::bitset<8> bi_t0(bit0[ i ]);
-            //     std::cout<< bi_t0  << std::endl;
-            // }
-        }
-    }
+    tile_file.close();
 }
