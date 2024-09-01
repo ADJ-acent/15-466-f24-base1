@@ -37,7 +37,6 @@ struct PNGConverter {
     };
 
     void generate_tile_data_files(std::vector<SavedTile> &tiles, std::string tile_name);    
-    void load_tile_data_files(std::string file_location, std::vector<SavedTile>& out_tiles);
 
     void generate_palette_data_files(std::vector<SavedPalette>);
 

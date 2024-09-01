@@ -1,5 +1,4 @@
 #include "PNGConverter.hpp"
-
 #include "load_save_png.hpp"
 #include "read_write_chunk.hpp"
 
@@ -155,11 +154,6 @@ void PNGConverter::convert_pngs_to_assets(std::string png_folder)
 
             }
 
-            // for (auto color : seen_colors){
-            //     std::cout<< uint32_t(color.x) << " "<<uint32_t(color.y) << " " << uint32_t(color.z) << " "<< uint32_t(color.w)  << std::endl;
-            // }
-            
-
             // convert tiles into write_chunk readable format
             std::vector<SavedTile> saved_tiles;
             for (uint16_t i = 0; i < uint16_t(tiles.size()); ++i){
@@ -192,17 +186,8 @@ void PNGConverter::generate_tile_data_files(std::vector<SavedTile> &tiles, std::
 
     std::string tile_path = tile_root + "/" + tile_name + ".tile";
     std::ofstream tile_file(tile_path);
+    assert(tile_file.is_open());
     write_chunk("TILE", tiles, &tile_file);
-    tile_file.close();
-}
-
-void PNGConverter::load_tile_data_files(std::string tile_path, std::vector<SavedTile>& out_tiles)
-{
-    std::ifstream tile_file(tile_path, std::ios::binary);
-    read_chunk(tile_file, "TILE", &out_tiles);
-    for (auto saved : out_tiles){
-        saved.print();
-    }
     tile_file.close();
 }
 

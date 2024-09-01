@@ -1,5 +1,6 @@
 #include "PPU466.hpp"
 #include "Mode.hpp"
+#include "AssetController.hpp"
 
 #include <glm/glm.hpp>
 
@@ -7,7 +8,7 @@
 #include <deque>
 
 struct PlayMode : Mode {
-	PlayMode();
+	PlayMode(AssetController controller);
 	virtual ~PlayMode();
 
 	//functions called by main loop:
@@ -28,6 +29,9 @@ struct PlayMode : Mode {
 
 	//player position:
 	glm::vec2 player_at = glm::vec2(0.0f);
+
+	//asset controller
+	AssetController asset_controller;
 
 	//----- drawing handled by PPU466 -----
 

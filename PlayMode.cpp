@@ -8,7 +8,7 @@
 
 #include <random>
 
-PlayMode::PlayMode() {
+PlayMode::PlayMode(AssetController controller) : asset_controller(controller) {
 	//TODO:
 	// you *must* use an asset pipeline of some sort to generate tiles.
 	// don't hardcode them like this!
