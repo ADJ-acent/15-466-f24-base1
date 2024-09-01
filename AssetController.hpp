@@ -5,9 +5,7 @@
 #include "data_path.hpp"
 
 #include <vector>
-#include <utility>
 #include <string>
-#include "Actor.hpp"
 
 struct AssetController
 {
@@ -25,12 +23,15 @@ struct AssetController
     std::array<PPU466::Palette, 8> palettes;
 
     // Tiles
-    std::array<PPU466::Tile, 256> tiles;
     uint8_t tile_count = 0;
+    std::array<PPU466::Tile, 256> tiles;
+    std::vector<PPU466::Tile> tile_bank;
 
     // Sprites
     struct LoadedSprite {
         uint8_t row_count, col_count;
+        uint8_t tile_index;
+        uint32_t tile_bank_index;
         std::vector<PPU466::Sprite> sprites;
     };
 
@@ -43,8 +44,6 @@ struct AssetController
 
     void load_animations();
 
-    std::vector<std::pair<Actor::State, std::vector<AssetController::LoadedSprite>>> Hamster_Animations;
-
-    void draw();
+    std::vector<std::vector<AssetController::LoadedSprite>> Hamster_Animations;
 
 };

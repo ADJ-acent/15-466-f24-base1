@@ -25,7 +25,7 @@ const NEST_LIBS = `../nest-libs/${maek.OS}`;
 //set compile flags (these can also be overridden per-task using the "options" parameter):
 if (maek.OS === "windows") {
 	maek.options.CPPFlags.push(
-		`/O2`, //optimize
+		`/O1`, //optimize
 		//include paths for nest libraries:
 		`/I${NEST_LIBS}/SDL2/include`,
 		`/I${NEST_LIBS}/glm/include`,
@@ -95,6 +95,7 @@ if (maek.OS === 'windows') {
 const game_objs = [
 	maek.CPP('PNGConverter.cpp'), // comment out when not converting assets
 	maek.CPP('Actor.cpp'),
+	maek.CPP('Hamster.cpp'),
 	maek.CPP('AssetController.cpp'),
 	maek.CPP('PlayMode.cpp'),
 	maek.CPP('PPU466.cpp'),

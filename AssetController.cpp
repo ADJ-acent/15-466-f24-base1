@@ -2,6 +2,7 @@
 #include <fstream>
 #include <filesystem>
 #include "read_write_chunk.hpp"
+#include "Actor.hpp"
 
 AssetController Asset_Controller = AssetController();
 
@@ -13,6 +14,7 @@ AssetController::AssetController()
 void AssetController::load_all()
 {
     load_palettes(data_path("assets/palettes.pal"));
+    load_animations();
 }
 
 void AssetController::load_palettes(std::string palettes_path)
@@ -51,8 +53,9 @@ AssetController::LoadedSprite AssetController::load_tiles(std::string tile_path)
     std::vector<SavedTile> out_tiles;
     read_chunk(tile_file, "TILE", &out_tiles);
     tile_file.close();
-
     uint8_t row_count = 0, col_count = 0;
+    out_sprite.tile_bank_index = uint32_t(tile_bank.size());
+    out_sprite.tile_index = tile_count;
     for (size_t i = 0; i < out_tiles.size(); ++i) {
         SavedTile cur_out_tile = out_tiles[i];
         // find dimension of this sprite
@@ -68,6 +71,7 @@ AssetController::LoadedSprite AssetController::load_tiles(std::string tile_path)
         cur_sprite.index = tile_count;
         cur_sprite.attributes = cur_out_tile.palette;
         out_sprite.sprites.push_back(cur_sprite);
+        tile_bank.push_back(cur_tile);
         tile_count ++;
     }
     out_sprite.row_count = row_count + 1;
@@ -102,9 +106,15 @@ void AssetController::load_animations()
         }
         return animation;
     };
-    Hamster_Animations.push_back(std::pair{Actor::State::idle, load_animation(data_path("assets/tiles/hamIdle"))});
-}
+    uint8_t temp_tile_count = tile_count;
+    Hamster_Animations.push_back(load_animation(data_path("assets/tiles/hamIdle")));
+    //resets tile count as hamster animation should use the same tile space
+    tile_count = temp_tile_count;
+    Hamster_Animations.push_back(load_animation(data_path("assets/tiles/hamWalk")));
+    tile_count = temp_tile_count;
+    Hamster_Animations.push_back(load_animation(data_path("assets/tiles/hamRoll")));
+    //std::cout<< "idle: "<<tile_bank[Hamster_Animations[0][0].tile_bank_index].bit0[2]<<std::endl;
+    //std::cout<< "walk: "<<tile_bank[Hamster_Animations[1][0].tile_bank_index].bit0[2]<<std::endl;
+    //std::cout<< "roll: "<<tile_bank[Hamster_Animations[2][0].tile_bank_index].bit0[2]<<std::endl;
 
-void AssetController::draw()
-{
 }

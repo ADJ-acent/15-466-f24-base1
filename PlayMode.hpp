@@ -2,7 +2,7 @@
 #include "PPU466.hpp"
 #include "Mode.hpp"
 #include "AssetController.hpp"
-#include "Actor.hpp"
+#include "Hamster.hpp"
 
 #include <glm/glm.hpp>
 
@@ -20,21 +20,16 @@ struct PlayMode : Mode {
 
 	//----- game state -----
 
-	//input tracking:
-	struct Button {
-		uint8_t downs = 0;
-		uint8_t pressed = 0;
-	} left, right, down, up;
-
 	//some weird background animation:
 	float background_fade = 0.0f;
 
-	// player hamster
-	Actor hamster;
 	//player position:
 	glm::vec2 player_at = glm::vec2(0.0f);
 
 	//----- drawing handled by PPU466 -----
 
 	PPU466 ppu;
+	
+	// player hamster
+	Hamster hamster;
 };
