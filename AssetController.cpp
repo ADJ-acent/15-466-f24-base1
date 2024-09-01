@@ -33,13 +33,6 @@ void AssetController::load_palettes(std::string palettes_path)
             glm::u8vec4(cur_pal.color[2][0], cur_pal.color[2][1], cur_pal.color[2][2], cur_pal.color[2][3]),
             glm::u8vec4(cur_pal.color[3][0], cur_pal.color[3][1], cur_pal.color[3][2], cur_pal.color[3][3]),
         };
-         std::cout << "Palette " << i << ":" << std::endl;
-        for (int j = 0; j < 4; ++j) {
-            std::cout << "Color " << j << ": "
-                  << "R=" << static_cast<int>(palettes[i][j].r) << ", "
-                  << "G=" << static_cast<int>(palettes[i][j].g) << ", "
-                  << "B=" << static_cast<int>(palettes[i][j].b) << ", "
-                  << "A=" << static_cast<int>(palettes[i][j].a) << std::endl;}
     }
 }
 

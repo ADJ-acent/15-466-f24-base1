@@ -4,7 +4,7 @@ struct Hamster : Actor {
     Hamster(float x, float y, PPU466* ppu, float speed) :
         Actor(x, y, ppu),
         speed(speed),
-        dash_top_speed(5*speed)
+        dash_top_speed(7*speed)
     {};
     //input tracking:
 	struct Button {

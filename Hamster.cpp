@@ -8,7 +8,14 @@ void Hamster::update(float elapsed)
     // handle inputs
     static bool can_roll = true;
 
-    glm::vec2 movement = {float(bool(right.pressed) - bool(left.pressed)), float(bool(up.pressed) - bool(down.pressed))};
+    glm::vec2 movement_not_normalized = glm::vec2(float(bool(right.pressed) - bool(left.pressed)), 
+        float(bool(up.pressed) - bool(down.pressed)));
+    glm::vec2 movement;
+    if (movement_not_normalized != glm::vec2(0)){
+        movement = glm::normalize(movement_not_normalized);
+    }
+    else movement = movement_not_normalized;
+
     static float dash_fall_off = 0.0f;
     const float fall_off_interval = 0.1f;
 
