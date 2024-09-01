@@ -112,6 +112,7 @@ void PNGConverter::convert_pngs_to_assets(std::string png_folder)
                 // pack the entire tile row into two uint8
                 uint8_t curr_tile_row_bit0 = 0;
                 uint8_t curr_tile_row_bit1 = 0;
+                uint8_t within_pixel_index = 0;
                 for (uint32_t curr_i = i; curr_i < i + tile_dimension; ++curr_i){
                     glm::u8vec4 pixel_color = data[curr_i];
                     uint8_t color_index = 4;
@@ -129,8 +130,9 @@ void PNGConverter::convert_pngs_to_assets(std::string png_folder)
                     // convert index to two bits
                     bool bit0 = color_index & 1;
                     bool bit1 = color_index & 2;
-                    curr_tile_row_bit0 = curr_tile_row_bit0 << 1 | uint8_t(bit0);
-                    curr_tile_row_bit1 = curr_tile_row_bit1 << 1 | uint8_t(bit1);
+                    curr_tile_row_bit0 = curr_tile_row_bit0 | uint8_t(bit0) << within_pixel_index;
+                    curr_tile_row_bit1 = curr_tile_row_bit1 | uint8_t(bit1) << within_pixel_index;
+                    within_pixel_index++;
 
                 }
                 tiles[tile_index].bit0.push_back(curr_tile_row_bit0);
@@ -164,8 +166,8 @@ void PNGConverter::convert_pngs_to_assets(std::string png_folder)
                 cur_saved_tile.palette = palette_index;
                 assert(read_tile.bit0.size() == 8);
                 assert(read_tile.bit1.size() == 8);
-                std::copy(read_tile.bit0.begin(), read_tile.bit0.end(), cur_saved_tile.bit0);
-                std::copy(read_tile.bit1.begin(), read_tile.bit1.end(), cur_saved_tile.bit1);
+                std::reverse_copy(read_tile.bit0.begin(), read_tile.bit0.end(), cur_saved_tile.bit0);
+                std::reverse_copy(read_tile.bit1.begin(), read_tile.bit1.end(), cur_saved_tile.bit1);
 
                 saved_tiles.push_back(cur_saved_tile);
             }

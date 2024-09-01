@@ -1,6 +1,8 @@
+#pragma once
 #include "PPU466.hpp"
 #include "Mode.hpp"
 #include "AssetController.hpp"
+#include "Actor.hpp"
 
 #include <glm/glm.hpp>
 
@@ -8,7 +10,7 @@
 #include <deque>
 
 struct PlayMode : Mode {
-	PlayMode(AssetController controller);
+	PlayMode();
 	virtual ~PlayMode();
 
 	//functions called by main loop:
@@ -27,11 +29,10 @@ struct PlayMode : Mode {
 	//some weird background animation:
 	float background_fade = 0.0f;
 
+	// player hamster
+	Actor hamster;
 	//player position:
 	glm::vec2 player_at = glm::vec2(0.0f);
-
-	//asset controller
-	AssetController asset_controller;
 
 	//----- drawing handled by PPU466 -----
 

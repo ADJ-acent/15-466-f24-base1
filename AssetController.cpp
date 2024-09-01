@@ -2,33 +2,52 @@
 #include <fstream>
 #include <filesystem>
 #include "read_write_chunk.hpp"
-#include "data_path.hpp"
+
+AssetController Asset_Controller = AssetController();
 
 AssetController::AssetController()
-    : hamster_sprite(LoadTagDefault, [&](){
-	    return load_tiles(data_path("assets/tiles/HamsterIdle.tile"));})
 {
     load_all();
 }
 
 void AssetController::load_all()
 {
-    
+    load_palettes(data_path("assets/palettes.pal"));
 }
 
 void AssetController::load_palettes(std::string palettes_path)
 {
     std::ifstream palettes_file(palettes_path, std::ios::binary);
-    
+    if (!palettes_file.is_open()) {
+        throw std::runtime_error("Failed to open the file: " + palettes_path);
+    }
+    std::vector<SavedPalette> out_palettes;
+    read_chunk(palettes_file, "PALE", &out_palettes);
+    for (size_t i = 0; i< out_palettes.size(); ++i) {
+        SavedPalette cur_pal = out_palettes[i];
+        palettes[i] = {
+            glm::u8vec4(cur_pal.color[0][0], cur_pal.color[0][1], cur_pal.color[0][2], cur_pal.color[0][3]),
+            glm::u8vec4(cur_pal.color[1][0], cur_pal.color[1][1], cur_pal.color[1][2], cur_pal.color[1][3]),
+            glm::u8vec4(cur_pal.color[2][0], cur_pal.color[2][1], cur_pal.color[2][2], cur_pal.color[2][3]),
+            glm::u8vec4(cur_pal.color[3][0], cur_pal.color[3][1], cur_pal.color[3][2], cur_pal.color[3][3]),
+        };
+         std::cout << "Palette " << i << ":" << std::endl;
+        for (int j = 0; j < 4; ++j) {
+            std::cout << "Color " << j << ": "
+                  << "R=" << static_cast<int>(palettes[i][j].r) << ", "
+                  << "G=" << static_cast<int>(palettes[i][j].g) << ", "
+                  << "B=" << static_cast<int>(palettes[i][j].b) << ", "
+                  << "A=" << static_cast<int>(palettes[i][j].a) << std::endl;}
+    }
 }
 
-AssetController::LoadedSprite* AssetController::load_tiles(std::string tile_path)
+AssetController::LoadedSprite AssetController::load_tiles(std::string tile_path)
 {
     std::ifstream tile_file(tile_path, std::ios::binary);
     if (!tile_file.is_open()) {
         throw std::runtime_error("Failed to open the file: " + tile_path);
     }
-    LoadedSprite* out_sprite = new LoadedSprite;
+    LoadedSprite out_sprite;
     std::vector<SavedTile> out_tiles;
     read_chunk(tile_file, "TILE", &out_tiles);
     tile_file.close();
@@ -48,12 +67,42 @@ AssetController::LoadedSprite* AssetController::load_tiles(std::string tile_path
         PPU466::Sprite cur_sprite;
         cur_sprite.index = tile_count;
         cur_sprite.attributes = cur_out_tile.palette;
-        out_sprite->sprites.push_back(cur_sprite);
+        out_sprite.sprites.push_back(cur_sprite);
         tile_count ++;
     }
-    out_sprite->row_count = row_count;
-    out_sprite->col_count = col_count;
+    out_sprite.row_count = row_count + 1;
+    out_sprite.col_count = col_count + 1;
     return out_sprite;
+}
+
+void AssetController::load_animations()
+{
+    auto load_animation = [](std::string root_path){
+        std::vector<AssetController::LoadedSprite> animation;
+        // Vector to store file names
+        std::vector<std::string> file_names;
+
+        // Check if the directory exists
+        if (!std::filesystem::is_directory(root_path)) {
+            std::cerr << "Directory does not exist: " << root_path << std::endl;
+            std::runtime_error("Attempted to load missing animations");
+        }
+
+        // Iterate over the directory and collect file names
+        for (const auto& entry : std::filesystem::directory_iterator(root_path)) {
+            file_names.push_back(entry.path().string());
+        }
+
+        // Sort file names alphabetically
+        std::sort(file_names.begin(), file_names.end());
+
+        for (std::string path : file_names) {
+
+            animation.push_back(Asset_Controller.load_tiles(path));
+        }
+        return animation;
+    };
+    Hamster_Animations.push_back(std::pair{Actor::State::idle, load_animation(data_path("assets/tiles/hamIdle"))});
 }
 
 void AssetController::draw()

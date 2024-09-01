@@ -1,9 +1,13 @@
 #pragma once
 
 #include "PPU466.hpp"
-#include <vector>
-#include <string>
 #include "Load.hpp"
+#include "data_path.hpp"
+
+#include <vector>
+#include <utility>
+#include <string>
+#include "Actor.hpp"
 
 struct AssetController
 {
@@ -35,11 +39,12 @@ struct AssetController
     void load_all();
 
     void load_palettes(std::string palettes_path);
-    LoadedSprite* load_tiles(std::string tile_path);
+    LoadedSprite load_tiles(std::string tile_path);
+
+    void load_animations();
+
+    std::vector<std::pair<Actor::State, std::vector<AssetController::LoadedSprite>>> Hamster_Animations;
 
     void draw();
 
-
-
-    Load<AssetController::LoadedSprite> hamster_sprite;
 };

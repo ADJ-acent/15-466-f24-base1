@@ -120,13 +120,12 @@ int main(int argc, char **argv) {
 	std::string png_folder = "C:/Users/andyj/OneDrive/Desktop/Github/GameProgramming/15-466-f24-base1/assets/png";
 	png_converter.convert_pngs_to_assets(png_folder);
 #endif
-	AssetController controller = AssetController();
 
 	//------------ load assets --------------
 	call_load_functions();
 
 	//------------ create game mode + make current --------------
-	Mode::set_current(std::make_shared< PlayMode >(controller));
+	Mode::set_current(std::make_shared< PlayMode >());
 
 
 	//------------ main loop ------------
