@@ -116,7 +116,6 @@ int main(int argc, char **argv) {
 #ifdef ASSET_CONVERSION
 	std::string asset_save_path = "assets";
 	PNGConverter png_converter(data_path(asset_save_path));
-
 	std::string png_folder = "C:/Users/andyj/OneDrive/Desktop/Github/GameProgramming/15-466-f24-base1/assets/png";
 	png_converter.convert_pngs_to_assets(png_folder);
 #endif

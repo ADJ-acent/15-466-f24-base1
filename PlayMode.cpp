@@ -28,6 +28,16 @@ PlayMode::PlayMode()
 
 	ppu.palette_table = Asset_Controller.palettes;
     hamster.load_animation(Asset_Controller.Hamster_Animations);
+
+	AssetController::LoadedSprite background_sprites = Asset_Controller.Background_Sprites;
+	// background, random assortment of stars
+	std::srand(static_cast<unsigned int>(std::time(nullptr)));
+	uint8_t bg_index = std::rand() & 0x0F;
+	for (uint32_t y = 0; y < PPU466::BackgroundHeight; ++y) {
+		for (uint32_t x = 0; x < PPU466::BackgroundWidth; ++x) {
+			ppu.background[x+PPU466::BackgroundWidth*y] = background_sprites.tile_index + bg_index;
+		}
+	}
 }
 
 PlayMode::~PlayMode() {
@@ -100,8 +110,8 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		0xff
 	);
 
-	//tilemap gets recomputed every frame as some weird plasma thing:
-	//NOTE: don't do this in your game! actually make a map or something :-)
+	// background
+	
 	for (uint32_t y = 0; y < PPU466::BackgroundHeight; ++y) {
 		for (uint32_t x = 0; x < PPU466::BackgroundWidth; ++x) {
 			//TODO: make weird plasma thing

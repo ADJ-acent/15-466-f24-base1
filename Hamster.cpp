@@ -18,9 +18,11 @@ void Hamster::update(float elapsed)
 
     static float dash_fall_off = 0.0f;
     const float fall_off_interval = 0.1f;
+    const float roll_movement_damping = 0.4f; // makes controlling the hamster super difficult while rolling 
 
+    // player can only roll when the rolling momentum has worn off
     float momentum_sum = abs(momentum.x) + abs(momentum.y);
-    if (momentum_sum < 0.4f){
+    if (momentum_sum < 1.0f){
         momentum = glm::vec2(0);
         can_roll = true;
     }
@@ -37,7 +39,10 @@ void Hamster::update(float elapsed)
         set_current_animation(rolling);
         momentum = movement * dash_top_speed;
     }
-    glm::vec2 velocity = (movement * speed + momentum) * elapsed;
+    //apply damping if rolling
+    glm::vec2 velocity = can_roll ? 
+        (movement * speed + momentum) * elapsed : 
+        (movement * speed * roll_movement_damping + momentum) * elapsed;
 	x_pos += velocity.x;
     y_pos += velocity.y;
 

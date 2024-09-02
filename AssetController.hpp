@@ -45,5 +45,6 @@ struct AssetController
     void load_animations();
 
     std::vector<std::vector<AssetController::LoadedSprite>> Hamster_Animations;
+    AssetController::LoadedSprite Background_Sprites;
 
 };

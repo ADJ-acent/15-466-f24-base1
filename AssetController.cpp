@@ -4,6 +4,7 @@
 #include "read_write_chunk.hpp"
 #include "Actor.hpp"
 
+// Global manager that loads everything, make sure all generated files are in the right place
 AssetController Asset_Controller = AssetController();
 
 AssetController::AssetController()
@@ -15,6 +16,7 @@ void AssetController::load_all()
 {
     load_palettes(data_path("assets/palettes.pal"));
     load_animations();
+    Background_Sprites = load_tiles(data_path("assets/background.tile"));
 }
 
 void AssetController::load_palettes(std::string palettes_path)
@@ -49,6 +51,7 @@ AssetController::LoadedSprite AssetController::load_tiles(std::string tile_path)
     uint8_t row_count = 0, col_count = 0;
     out_sprite.tile_bank_index = uint32_t(tile_bank.size());
     out_sprite.tile_index = tile_count;
+    std::cout<< "name: " << tile_path << " index for palette: " << int(out_tiles[0].palette)<<std::endl;
     for (size_t i = 0; i < out_tiles.size(); ++i) {
         SavedTile cur_out_tile = out_tiles[i];
         // find dimension of this sprite
@@ -106,8 +109,5 @@ void AssetController::load_animations()
     Hamster_Animations.push_back(load_animation(data_path("assets/tiles/hamWalk")));
     tile_count = temp_tile_count;
     Hamster_Animations.push_back(load_animation(data_path("assets/tiles/hamRoll")));
-    //std::cout<< "idle: "<<tile_bank[Hamster_Animations[0][0].tile_bank_index].bit0[2]<<std::endl;
-    //std::cout<< "walk: "<<tile_bank[Hamster_Animations[1][0].tile_bank_index].bit0[2]<<std::endl;
-    //std::cout<< "roll: "<<tile_bank[Hamster_Animations[2][0].tile_bank_index].bit0[2]<<std::endl;
-
+    
 }
