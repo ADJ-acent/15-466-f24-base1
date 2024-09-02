@@ -17,7 +17,6 @@ void Actor::load_animation(std::vector<std::vector<AssetController::LoadedSprite
     palette_index = in_animation[0][0].sprites[0].attributes;
     ppu_start_index = in_animation[0][0].tile_index + offset;
     tile_start_index = in_animation[0][0].tile_index;
-    std::cout<<"start_index"<<int(ppu_start_index)<<std::endl;
     has_loaded_animation = true;
     set_current_animation(idle);
 }

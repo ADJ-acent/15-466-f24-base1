@@ -116,8 +116,10 @@ void AssetController::load_animations()
     tile_count = temp_tile_count;
     Hamster_Animations.push_back(load_animation(data_path("assets/tiles/hamRoll")));
     Carrot_Animations.push_back(load_animation(data_path("assets/tiles/carIdle")));
+    // both place holders for walk and roll
     Carrot_Animations.push_back(load_animation(data_path("assets/tiles/carIdle")));
     Carrot_Animations.push_back(load_animation(data_path("assets/tiles/carIdle")));
+    
     Carrot_Animations.push_back(load_animation(data_path("assets/tiles/carDeath")));
     
 }
