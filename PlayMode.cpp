@@ -113,8 +113,8 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 	);
 
 	//background scroll:
-	ppu.background_position.x = int32_t(-0.5f * player_at.x);
-	ppu.background_position.y = int32_t(-0.5f * player_at.y);
+	ppu.background_position.x = int32_t(-0.5f * hamster.x_pos);
+	ppu.background_position.y = int32_t(-0.5f * hamster.y_pos);
 
 	hamster.draw();
 

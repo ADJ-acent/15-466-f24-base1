@@ -1,7 +1,6 @@
 #pragma once
 
 #include "PPU466.hpp"
-#include "Load.hpp"
 #include "data_path.hpp"
 
 #include <vector>
@@ -45,6 +44,7 @@ struct AssetController
     void load_animations();
 
     std::vector<std::vector<AssetController::LoadedSprite>> Hamster_Animations;
+    std::vector<std::vector<AssetController::LoadedSprite>> Carrot_Animations;
     AssetController::LoadedSprite Background_Sprites;
 
 };

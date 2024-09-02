@@ -15,7 +15,6 @@ struct Hamster : Actor {
     const float speed;
     const float dash_top_speed;
     glm::vec2 momentum = glm::vec2(0);
-    State current_state = idle;
 
     void update(float elapsed) override;
 

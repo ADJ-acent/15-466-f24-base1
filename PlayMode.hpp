@@ -23,9 +23,6 @@ struct PlayMode : Mode {
 	//some weird background animation:
 	float background_fade = 0.0f;
 
-	//player position:
-	glm::vec2 player_at = glm::vec2(0.0f);
-
 	//----- drawing handled by PPU466 -----
 
 	PPU466 ppu;
