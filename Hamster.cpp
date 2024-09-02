@@ -63,6 +63,9 @@ void Hamster::update(float elapsed)
 	down.downs = 0;
 }
 
+// sets the current animation by replacing the tiles inside the tile table
+// to save space on the tile table (not needed to be honest, as I mixed up
+// the limit of sprites and tiles)
 void Hamster::set_current_animation(State state)
 {
     if (current_state == state) return;
