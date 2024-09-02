@@ -1,4 +1,5 @@
 #include "CarrotController.hpp"
+#include "Hamster.hpp"
 
 CarrotController::CarrotController(Hamster *hamster, PPU466 *ppu, 
     std::vector<std::vector<AssetController::LoadedSprite>> in_animation) : 
@@ -12,15 +13,7 @@ CarrotController::CarrotController(Hamster *hamster, PPU466 *ppu,
     }
 {
     for (uint8_t i = 0; i< carrots.size(); ++i)
-        carrots[i].load_animation(in_animation, i * 4);
-}
-
-void CarrotController::load_animation(std::vector<std::vector<AssetController::LoadedSprite>> in_animation)
-{
-    // std::cout<<"loading"<<std::endl;
-    // for (Carrot carrot : carrots){
-    //     carrot.load_animation(in_animation);
-    // }
+        carrots[i].load_animation(in_animation, i * 8);
 }
 
 void CarrotController::spawn_carrot(float x, float y)
@@ -41,4 +34,16 @@ void CarrotController::draw()
     for (uint8_t i = 0; i< carrots.size(); ++i)
         carrots[i].draw();
     
+}
+
+void CarrotController::Carrot::update(float elapsed)
+{
+    Actor::update(elapsed);
+    glm::vec2 hamster_pos = {controller->hamster->x_pos, controller->hamster->y_pos};
+    glm::vec2 car_pos = {x_pos, y_pos};
+    if (glm::distance(hamster_pos, car_pos) <= controller->eat_radius){
+        set_current_animation(death);
+        current_animation.frame_time = 0.1f;
+    }
+    if (current_state == death) return; // only update animation when dead
 }

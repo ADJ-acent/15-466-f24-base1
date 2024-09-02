@@ -17,5 +17,6 @@ struct Hamster : Actor {
     glm::vec2 momentum = glm::vec2(0);
 
     void update(float elapsed) override;
+    void set_current_animation(State state) override;
 
 };

@@ -16,6 +16,8 @@ void Actor::load_animation(std::vector<std::vector<AssetController::LoadedSprite
     animations = in_animation;
     palette_index = in_animation[0][0].sprites[0].attributes;
     ppu_start_index = in_animation[0][0].tile_index + offset;
+    tile_start_index = in_animation[0][0].tile_index;
+    std::cout<<"start_index"<<int(ppu_start_index)<<std::endl;
     has_loaded_animation = true;
     set_current_animation(idle);
 }
@@ -27,6 +29,10 @@ void Actor::update(float elapsed)
     if (time_since_last_frame >= current_animation.frame_time) {
         // updates the animation to the next frame
         time_since_last_frame -= current_animation.frame_time;
+        if (current_state == death && current_animation.current_index + 1 == current_animation.sprites.size()) {
+            on_death();
+            return;
+        }
         current_animation.current_index = 
             (current_animation.current_index + 1) % current_animation.sprites.size();
     }
@@ -47,6 +53,12 @@ void Actor::draw()
 	}
 }
 
+void Actor::on_death()
+{
+    x_pos = 250;
+    y_pos = 250;
+}
+
 void Actor::set_current_animation(State state)
 {
     if (current_state == state) return;
@@ -54,10 +66,7 @@ void Actor::set_current_animation(State state)
     current_animation.sprites = animations[state];
     current_animation.current_index = 0;
     current_animation.frame_time = 0.25f;
-    uint32_t start_index = animations[state][0].tile_bank_index;
-    for (uint8_t i = 0; i < uint8_t(animations[state].size() * animations[state][0].sprites.size()); ++i) {
-        ppu->tile_table[ppu_start_index + i] = Asset_Controller.tile_bank[start_index + i];
-    }
+    time_since_last_frame = 0.0f;
 }
 
 PPU466::Sprite Actor::get_current_sprite_at_index(uint8_t i)

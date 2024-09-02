@@ -1,10 +1,12 @@
 #include "Hamster.hpp"
-#include <iostream>
+#include "AssetController.hpp"
+extern AssetController Asset_Controller;
 
 void Hamster::update(float elapsed)
 {
     // update animation
     Actor::update(elapsed);
+    if (current_state == death) return;
     // handle inputs
     static bool can_roll = true;
 
@@ -59,4 +61,18 @@ void Hamster::update(float elapsed)
 	right.downs = 0;
 	up.downs = 0;
 	down.downs = 0;
+}
+
+void Hamster::set_current_animation(State state)
+{
+    if (current_state == state) return;
+    current_state = state;
+    current_animation.sprites = animations[state];
+    current_animation.current_index = 0;
+    current_animation.frame_time = 0.25f;
+    time_since_last_frame = 0.0f;
+    uint32_t start_index = animations[state][0].tile_bank_index;
+    for (uint8_t i = 0; i < uint8_t(animations[state].size() * animations[state][0].sprites.size()); ++i) {
+        ppu->tile_table[tile_start_index + i] = Asset_Controller.tile_bank[start_index + i];
+    }
 }

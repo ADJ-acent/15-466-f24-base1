@@ -22,6 +22,7 @@ struct Actor {
     bool has_loaded_animation = false;
     uint8_t palette_index;
     uint8_t ppu_start_index;
+    uint8_t tile_start_index;
     float x_pos, y_pos; // 0 - 255, 240+ is offscreen, origin is bottom left
     float time_since_last_frame = 0;
     PPU466* ppu;
@@ -33,8 +34,9 @@ struct Actor {
 
     virtual void update(float elapsed);
     void draw();
+    void on_death();
 
-    void set_current_animation(State state);
+    virtual void set_current_animation(State state);
     PPU466::Sprite get_current_sprite_at_index(uint8_t i);
     uint8_t get_row_count();
 
