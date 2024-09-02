@@ -3,7 +3,6 @@
 #include "AssetController.hpp"
 #include <string>
 #include <vector>
-#include <utility>
 
 struct Actor {
     Actor(float x, float y, PPU466* ppu);
@@ -21,9 +20,10 @@ struct Actor {
         death,
     };
     bool has_loaded_animation = false;
-    float x_pos, y_pos; // 0 - 255, 240+ is offscreen, origin is bottom left
     uint8_t palette_index;
     uint8_t ppu_start_index;
+    float x_pos, y_pos; // 0 - 255, 240+ is offscreen, origin is bottom left
+    float time_since_last_frame = 0;
     PPU466* ppu;
     std::vector<std::vector<AssetController::LoadedSprite>> animations;
     Animation current_animation;

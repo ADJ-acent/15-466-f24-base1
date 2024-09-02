@@ -94,6 +94,7 @@ if (maek.OS === 'windows') {
 //returns objFile: objFileBase + a platform-dependant suffix ('.o' or '.obj')
 const game_objs = [
 	maek.CPP('PNGConverter.cpp'), // comment out when not converting assets
+	maek.CPP('CarrotController.cpp'),
 	maek.CPP('Actor.cpp'),
 	maek.CPP('Hamster.cpp'),
 	maek.CPP('AssetController.cpp'),

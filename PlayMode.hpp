@@ -3,6 +3,7 @@
 #include "Mode.hpp"
 #include "AssetController.hpp"
 #include "Hamster.hpp"
+#include "CarrotController.hpp"
 
 #include <glm/glm.hpp>
 
@@ -29,4 +30,7 @@ struct PlayMode : Mode {
 	
 	// player hamster
 	Hamster hamster;
+
+	// carrots
+	CarrotController carrot_controller;
 };

@@ -1,12 +1,11 @@
 #include "Actor.hpp"
-#include "iostream"
 
 extern AssetController Asset_Controller;
 
 Actor::Actor(float x, float y, PPU466 *ppu):
+    ppu_start_index(0),
     x_pos(x),
     y_pos(y),
-    ppu_start_index(0),
     ppu(ppu) 
 {
 }
@@ -24,7 +23,6 @@ void Actor::load_animation(std::vector<std::vector<AssetController::LoadedSprite
 void Actor::update(float elapsed)
 {
     assert(has_loaded_animation);
-    static float time_since_last_frame = 0;
     time_since_last_frame += elapsed;
     if (time_since_last_frame >= current_animation.frame_time) {
         // updates the animation to the next frame
@@ -37,7 +35,6 @@ void Actor::update(float elapsed)
 void Actor::draw()
 {
     assert(has_loaded_animation);
-    //std::cout<< "Tilebank: "<<current_animation.sprites[0].tile_bank_index<<std::endl;
     // keep the center of the sprite to x_pos
     static float x_offset = float(current_animation.sprites[current_animation.current_index].col_count*4);
     static float y_offset = float(current_animation.sprites[current_animation.current_index].col_count*4 - 8);

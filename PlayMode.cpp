@@ -10,24 +10,16 @@
 
 extern AssetController Asset_Controller;
 
-PlayMode::PlayMode()
-: hamster(10.0f,10.0f,&ppu, 20.0f)
+PlayMode::PlayMode() :
+	hamster(10.0f,10.0f,&ppu, 20.0f),
+	carrot_controller(&hamster, &ppu,Asset_Controller.Carrot_Animations)
 {
-
 	// tiles should be entirely based on the asset controller
 	ppu.tile_table = Asset_Controller.tiles;
 
-	// temp override for the background
-	ppu.tile_table[63].bit0 = {
-		0,0,0,0,0,0,0,0
-	};
-
-	ppu.tile_table[63].bit1 = {
-		0,0,0,0,0,0,0,0
-	};
-
 	ppu.palette_table = Asset_Controller.palettes;
     hamster.load_animation(Asset_Controller.Hamster_Animations);
+	// carrot_controller.load_animation(Asset_Controller.Carrot_Animations);
 
 	AssetController::LoadedSprite background_sprites = Asset_Controller.Background_Sprites;
 	// background, random assortment of stars
@@ -99,6 +91,7 @@ void PlayMode::update(float elapsed) {
 	background_fade -= std::floor(background_fade);
 
 	hamster.update(elapsed);
+	carrot_controller.update(elapsed);
 }
 
 void PlayMode::draw(glm::uvec2 const &drawable_size) {
@@ -117,6 +110,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 	ppu.background_position.y = int32_t(-0.5f * hamster.y_pos);
 
 	hamster.draw();
+	carrot_controller.draw();
 
 	//--- actually draw ---
 	ppu.draw(drawable_size);
