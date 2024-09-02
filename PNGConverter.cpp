@@ -94,7 +94,6 @@ void PNGConverter::convert_pngs_to_assets(std::string png_folder)
                 assert(found_it != palettes.end());
                 palette_index = uint8_t(found_it - palettes.begin());
             }
-            //std::cout<< tile_name<< " palette index: " << int(palette_index)<<std::endl;
 
             uint16_t tile_col = 0;
             uint16_t row = 0;
@@ -172,7 +171,6 @@ void PNGConverter::convert_pngs_to_assets(std::string png_folder)
 
                 saved_tiles.push_back(cur_saved_tile);
             }
-            std::cout<< tile_name<< " palette index: " << int(saved_tiles[0].palette)<<std::endl;
 
             generate_tile_data_files(saved_tiles, tile_name);
         }

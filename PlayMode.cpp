@@ -32,9 +32,11 @@ PlayMode::PlayMode()
 	AssetController::LoadedSprite background_sprites = Asset_Controller.Background_Sprites;
 	// background, random assortment of stars
 	std::srand(static_cast<unsigned int>(std::time(nullptr)));
-	uint8_t bg_index = std::rand() & 0x0F;
 	for (uint32_t y = 0; y < PPU466::BackgroundHeight; ++y) {
 		for (uint32_t x = 0; x < PPU466::BackgroundWidth; ++x) {
+			uint8_t rand_num = std::rand() & 0x7F;
+			uint8_t bg_index = 0;
+			if ((rand_num & 0x70) ==  0x70) bg_index = rand_num & 0xf;
 			ppu.background[x+PPU466::BackgroundWidth*y] = background_sprites.tile_index + bg_index;
 		}
 	}
@@ -102,22 +104,13 @@ void PlayMode::update(float elapsed) {
 void PlayMode::draw(glm::uvec2 const &drawable_size) {
 	//--- set ppu state based on game state ---
 
-	//background color will be some hsv-like fade:
-	ppu.background_color = glm::u8vec4(0,0,0,
-		// std::min(255,std::max(0,int32_t(255 * 0.5f * (0.5f + std::sin( 2.0f * M_PI * (background_fade + 0.0f / 3.0f) ) ) ))),
-		// std::min(255,std::max(0,int32_t(255 * 0.5f * (0.5f + std::sin( 2.0f * M_PI * (background_fade + 1.0f / 3.0f) ) ) ))),
-		// std::min(255,std::max(0,int32_t(255 * 0.5f * (0.5f + std::sin( 2.0f * M_PI * (background_fade + 2.0f / 3.0f) ) ) ))),
+	//background color will be some blue fade;
+	ppu.background_color = glm::u8vec4(
+		std::min(70,std::max(0,int32_t(255 * 0.5f * (0.5f + std::sin( 2.0f * M_PI * (background_fade + 0.0f / 3.0f) ) ) ))),
+		std::min(70,std::max(0,int32_t(255 * 0.5f * (0.5f + std::sin( 2.0f * M_PI * (background_fade + 1.0f / 3.0f) ) ) ))),
+		155,
 		0xff
 	);
-
-	// background
-	
-	for (uint32_t y = 0; y < PPU466::BackgroundHeight; ++y) {
-		for (uint32_t x = 0; x < PPU466::BackgroundWidth; ++x) {
-			//TODO: make weird plasma thing
-			ppu.background[x+PPU466::BackgroundWidth*y] = 63;
-		}
-	}
 
 	//background scroll:
 	ppu.background_position.x = int32_t(-0.5f * player_at.x);

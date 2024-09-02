@@ -16,7 +16,7 @@ void AssetController::load_all()
 {
     load_palettes(data_path("assets/palettes.pal"));
     load_animations();
-    Background_Sprites = load_tiles(data_path("assets/background.tile"));
+    Background_Sprites = load_tiles(data_path("assets/tiles/background.tile"));
 }
 
 void AssetController::load_palettes(std::string palettes_path)
@@ -51,7 +51,6 @@ AssetController::LoadedSprite AssetController::load_tiles(std::string tile_path)
     uint8_t row_count = 0, col_count = 0;
     out_sprite.tile_bank_index = uint32_t(tile_bank.size());
     out_sprite.tile_index = tile_count;
-    std::cout<< "name: " << tile_path << " index for palette: " << int(out_tiles[0].palette)<<std::endl;
     for (size_t i = 0; i < out_tiles.size(); ++i) {
         SavedTile cur_out_tile = out_tiles[i];
         // find dimension of this sprite
