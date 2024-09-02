@@ -4,7 +4,13 @@
 #include "read_write_chunk.hpp"
 #include "Actor.hpp"
 
+#define ASSET_CONVERSION //only defined when we need to convert assets
+//converts pngs to easy to read format for PPU466
 // Global manager that loads everything, make sure all generated files are in the right place
+#ifdef ASSET_CONVERSION
+    #include "PNGConverter.hpp"
+	PNGConverter png_converter = PNGConverter(data_path("assets"), "C:/Users/andyj/OneDrive/Desktop/Github/GameProgramming/15-466-f24-base1/assets/png");
+#endif
 AssetController Asset_Controller = AssetController();
 
 AssetController::AssetController()
@@ -14,9 +20,9 @@ AssetController::AssetController()
 
 void AssetController::load_all()
 {
+    Background_Sprites = load_tiles(data_path("assets/tiles/background.tile"));
     load_palettes(data_path("assets/palettes.pal"));
     load_animations();
-    Background_Sprites = load_tiles(data_path("assets/tiles/background.tile"));
 }
 
 void AssetController::load_palettes(std::string palettes_path)
@@ -36,6 +42,7 @@ void AssetController::load_palettes(std::string palettes_path)
             glm::u8vec4(cur_pal.color[3][0], cur_pal.color[3][1], cur_pal.color[3][2], cur_pal.color[3][3]),
         };
     }
+    palettes_file.close();
 }
 
 AssetController::LoadedSprite AssetController::load_tiles(std::string tile_path)
@@ -108,5 +115,6 @@ void AssetController::load_animations()
     Hamster_Animations.push_back(load_animation(data_path("assets/tiles/hamWalk")));
     tile_count = temp_tile_count;
     Hamster_Animations.push_back(load_animation(data_path("assets/tiles/hamRoll")));
+    Carrot_Animations.push_back(load_animation(data_path("assets/tiles/carIdle")));
     
 }

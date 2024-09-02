@@ -22,7 +22,7 @@ namespace std {
 void PNGConverter::convert_pngs_to_assets(std::string png_folder)
 {
     // vector of all the palettes we see from the pngs
-    std::vector<SavedPalette> saved_palettes;
+    std::vector<AssetController::SavedPalette> saved_palettes;
     std::vector<std::unordered_set<glm::u8vec4>> palettes; // temp structure for search
 
     std::string ext(".png");
@@ -50,7 +50,7 @@ void PNGConverter::convert_pngs_to_assets(std::string png_folder)
         }
         assert(palettes.size() <= 8);
         for (uint8_t i = 0; i < uint8_t(palettes.size()); ++i){
-            SavedPalette palette;
+            AssetController::SavedPalette palette;
             int count = 0;
             for (auto color : palettes[i]) {
                 palette.color[count][0] = color.r;
@@ -117,7 +117,7 @@ void PNGConverter::convert_pngs_to_assets(std::string png_folder)
                     glm::u8vec4 pixel_color = data[curr_i];
                     uint8_t color_index = 4;
                     {// find index of the color:
-                        SavedPalette palette = saved_palettes[palette_index];
+                        AssetController::SavedPalette palette = saved_palettes[palette_index];
                         for (uint8_t color_i = 0; color_i< 4; color_i++) {
                             glm::u8vec4 palette_color = {palette.color[color_i][0], palette.color[color_i][1], palette.color[color_i][2], palette.color[color_i][3]};
                             if (pixel_color == palette_color){
@@ -157,9 +157,9 @@ void PNGConverter::convert_pngs_to_assets(std::string png_folder)
             }
 
             // convert tiles into write_chunk readable format
-            std::vector<SavedTile> saved_tiles;
+            std::vector<AssetController::SavedTile> saved_tiles;
             for (uint16_t i = 0; i < uint16_t(tiles.size()); ++i){
-                SavedTile cur_saved_tile;
+                AssetController::SavedTile cur_saved_tile;
                 SingleTile read_tile = tiles[i];
                 cur_saved_tile.row = uint8_t(i / x_tile_count);
                 cur_saved_tile.col = uint8_t(i % x_tile_count);
@@ -180,25 +180,25 @@ void PNGConverter::convert_pngs_to_assets(std::string png_folder)
     return;
 }
 
-void PNGConverter::generate_tile_data_files(std::vector<SavedTile> &tiles, std::string tile_name)
+void PNGConverter::generate_tile_data_files(std::vector<AssetController::SavedTile> &tiles, std::string tile_name)
 {
     assert(asset_root != std::string()); // shouldn't be uninitialized
     assert(tiles.size() < size_t(64)); // can only have 64 total tiles
     static std::string tile_root = asset_root + "/" + "tiles";
 
     std::string tile_path = tile_root + "/" + tile_name + ".tile";
-    std::ofstream tile_file(tile_path);
+    std::ofstream tile_file(tile_path, std::ios::binary);
     assert(tile_file.is_open());
     write_chunk("TILE", tiles, &tile_file);
     tile_file.close();
 }
 
-void PNGConverter::generate_palette_data_files(std::vector<SavedPalette> palettes)
+void PNGConverter::generate_palette_data_files(std::vector<AssetController::SavedPalette> palettes)
 {
     assert(asset_root != std::string()); // shouldn't be uninitialized
 
     std::string palettes_path = asset_root + "/palettes.pal";
-    std::ofstream palettes_file(palettes_path);
+    std::ofstream palettes_file(palettes_path, std::ios::binary);
     write_chunk("PALE", palettes, &palettes_file);
     palettes_file.close();
 
