@@ -12,13 +12,10 @@ struct CarrotController
             {};
         CarrotController* controller;
     };
-
-    std::vector<Carrot> carrots;
-
-    const uint8_t max_carrots = 4;
+    
     Hamster* hamster;
     PPU466* ppu;
-    Carrot carrot;
+    std::array<Carrot, 4> carrots; // have max of 4 carrots in the scene
 
     void load_animation(std::vector<std::vector<AssetController::LoadedSprite>> in_animation);
     void spawn_carrot(float x, float y);

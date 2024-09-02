@@ -29,7 +29,7 @@ struct Actor {
     Animation current_animation;
     State current_state = death;
 
-    void load_animation(std::vector<std::vector<AssetController::LoadedSprite>> in_animation);
+    void load_animation(std::vector<std::vector<AssetController::LoadedSprite>> in_animation, uint8_t offset = 0);
 
     virtual void update(float elapsed);
     void draw();

@@ -10,12 +10,12 @@ Actor::Actor(float x, float y, PPU466 *ppu):
 {
 }
 
-void Actor::load_animation(std::vector<std::vector<AssetController::LoadedSprite>> in_animation)
+void Actor::load_animation(std::vector<std::vector<AssetController::LoadedSprite>> in_animation, uint8_t offset)
 {
     assert(in_animation.size() > 0);
     animations = in_animation;
     palette_index = in_animation[0][0].sprites[0].attributes;
-    ppu_start_index = in_animation[0][0].tile_index;
+    ppu_start_index = in_animation[0][0].tile_index + offset;
     has_loaded_animation = true;
     set_current_animation(idle);
 }

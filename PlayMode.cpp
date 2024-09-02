@@ -109,8 +109,8 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 	ppu.background_position.x = int32_t(-0.5f * hamster.x_pos);
 	ppu.background_position.y = int32_t(-0.5f * hamster.y_pos);
 
-	hamster.draw();
 	carrot_controller.draw();
+	hamster.draw();
 
 	//--- actually draw ---
 	ppu.draw(drawable_size);
