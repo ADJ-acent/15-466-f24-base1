@@ -34,7 +34,7 @@ struct Actor {
 
     virtual void update(float elapsed);
     void draw();
-    void on_death();
+    virtual void on_death();
 
     virtual void set_current_animation(State state);
     PPU466::Sprite get_current_sprite_at_index(uint8_t i);

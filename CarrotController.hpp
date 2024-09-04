@@ -14,11 +14,15 @@ struct CarrotController
         glm::vec2 velocity;
 
         void update(float elapsed) override;
+        void on_death() override;
     };
 
     Hamster* hamster;
     PPU466* ppu;
     std::array<Carrot, 6> carrots; // have max of 6 carrots in the scene
+    std::array<bool, 6> dead_carrots{false, false, false, false, false, false};
+    const float respawn_time = 2.0f;
+    float since_respawn = 0.0f;
     const uint8_t eat_radius = 10;
     const uint8_t speed = 100;
 

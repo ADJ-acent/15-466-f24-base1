@@ -26,8 +26,31 @@ void CarrotController::spawn_carrot(float x, float y)
 
 void CarrotController::update(float elapsed)
 {
+    {// respawn any dead carrots
+        uint8_t respawn_index = uint8_t(carrots.size());
+        for (uint8_t i = 0; uint8_t(i < carrots.size()); ++i) {
+            if (dead_carrots[i]) {
+                respawn_index = i;
+            }
+        }
+        if (since_respawn > respawn_time) {
+            if (respawn_index != carrots.size()) {
+                bool quadrant[2]{(uint8_t(hamster->x_pos) < 120), (uint8_t(hamster->y_pos) < 120)}; // false if hamster is in the left side, false if hamster is in the bottom
+                dead_carrots[respawn_index] = false;
+                carrots[respawn_index].set_current_animation(Actor::State::idle);
+                carrots[respawn_index].x_pos = float(quadrant[0] * 240);
+                carrots[respawn_index].y_pos = float(quadrant[1] * 240);
+                since_respawn = 0;
+            }
+        }
+        else {
+            since_respawn += elapsed;
+        }
+    }
+
     for (uint8_t i = 0; i< carrots.size(); ++i) {
-        carrots[i].velocity = rule1(i) + rule2(i)*5.0f +rule3(i)*5.0f + rule4(i) * 5.0f;
+        if (!dead_carrots[i])
+            carrots[i].velocity = rule1(i) + rule2(i)*5.0f +rule3(i)*5.0f + rule4(i) * 5.0f;
     }
     
     for (uint8_t i = 0; i< carrots.size(); ++i)
@@ -58,7 +81,7 @@ glm::vec2 CarrotController::rule2(uint8_t carrot_index)
     glm::vec2 self_pos = glm::vec2(carrots[carrot_index].x_pos, carrots[carrot_index].y_pos);
     glm::vec2 res = glm::vec2(0,0);
     for (uint8_t i = 0; i < carrots.size(); i++) {
-        if (i == carrot_index) continue;
+        if (i == carrot_index || dead_carrots[i]) continue;
         glm::vec2 other_pos = glm::vec2(carrots[i].x_pos, carrots[i].y_pos);
         if (glm::distance(self_pos, other_pos) <= distance_threshold){
             res += self_pos - other_pos;
@@ -113,4 +136,17 @@ void CarrotController::Carrot::update(float elapsed)
     x_pos += velocity.x * elapsed;
     y_pos += velocity.y * elapsed;
 
+}
+
+void CarrotController::Carrot::on_death()
+{
+    Actor::on_death();
+    bool others_dead = false;
+    for (int8_t i = 0; i < controller->carrots.size(); ++i){
+        if (controller->dead_carrots[i]) others_dead = true;
+        if (this == &(controller->carrots[i])) {
+            controller->dead_carrots[i] = true;
+        }
+    }
+    if (!others_dead) controller->since_respawn = 0.0f;
 }
