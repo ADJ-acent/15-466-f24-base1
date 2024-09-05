@@ -1,4 +1,4 @@
-![Title Card](title)
+![Title Card](Hamster_Title.png)
 
 Author: Weiwen "Andy" Jiang
 
@@ -6,7 +6,7 @@ Design: A viscious hamster that rolls around hunting for timid carrots, try to g
 
 Screen Shot:
 
-![Screen Shot](Hamster_Title.png)
+![Screen Shot](15-466-f24-base1/screenshot.png)
 
 How the Asset Pipeline Works:
 
