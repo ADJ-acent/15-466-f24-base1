@@ -1,5 +1,5 @@
 ![Title Card](Hamster_Title.png)
-#Indulgent Feast
+# Indulgent Feast
 
 Author: Weiwen "Andy" Jiang
 
@@ -22,6 +22,8 @@ Source files are included in the "\assets\png" folder.
 How To Play:
 
 Arrow keys to move, space bar to roll (gives a huge speed boost that wears off quickly, hard to change directions once you start). Once time is up, press "r" to restart! Run over the carrots to eat them, top left is your score, top right is the time left, you will always have 60 seconds. Your score will display in the center of the screen if the time is up.
+
+Tip: You can travel from one edge of the screen to the other while the carrot can't, use that to your advantage.
 
 This game was built with [NEST](NEST.md).
 
