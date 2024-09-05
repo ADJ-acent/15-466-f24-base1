@@ -29,7 +29,7 @@ void Actor::update(float elapsed)
     if (time_since_last_frame >= current_animation.frame_time) {
         // updates the animation to the next frame
         time_since_last_frame -= current_animation.frame_time;
-        if (current_state == death && current_animation.current_index + 1 == current_animation.sprites.size() && !in_on_death) {
+        if (current_state == death && int(current_animation.current_index + 1) == int(current_animation.sprites.size()) && !in_on_death) {
             in_on_death = true;
             on_death();
             return;
@@ -45,7 +45,7 @@ void Actor::draw()
     // keep the center of the sprite to x_pos
     static float x_offset = float(current_animation.sprites[current_animation.current_index].col_count*4);
     static float y_offset = float(current_animation.sprites[current_animation.current_index].col_count*4 - 8);
-	for (int i = 0; i < current_animation.sprites.size(); ++i){
+	for (int i = 0; i < int(current_animation.sprites.size()); ++i){
 		PPU466::Sprite cur = get_current_sprite_at_index(uint8_t(i));
 		ppu->sprites[i+ppu_start_index].x = uint8_t(x_pos + float(8 * (i % get_row_count())) - x_offset);
 		ppu->sprites[i+ppu_start_index].y = uint8_t(y_pos - float(8 * (i / get_row_count())) + y_offset);

@@ -5,9 +5,9 @@ Author: Weiwen "Andy" Jiang
 
 Design: A viscious hamster that rolls around hunting for timid carrots, try to get as many as possible in 60 secs!
 
-Screen Shot:
+Demo gif:
 
-![Screen Shot](screenshot.png)
+![Demo GIF](demo.gif)
 
 How the Asset Pipeline Works:
 

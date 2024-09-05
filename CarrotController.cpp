@@ -137,7 +137,7 @@ void CarrotController::Carrot::on_death()
     Actor::on_death();
     controller->score++;
     bool others_dead = false;
-    for (int8_t i = 0; i < controller->carrots.size(); ++i){
+    for (uint8_t i = 0; i < uint8_t(controller->carrots.size()); ++i){
         if (controller->dead_carrots[i]) others_dead = true;
         if (this == &(controller->carrots[i])) {
             controller->dead_carrots[i] = true;

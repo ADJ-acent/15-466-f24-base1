@@ -13,7 +13,7 @@ void Number::draw(uint8_t number)
     // keep the center of the sprite to x_pos
     static float x_offset = float(number_sprites[number].col_count*4);
     static float y_offset = float(number_sprites[number].col_count*4 - 8);
-	for (int i = 0; i < number_sprites[number].sprites.size(); ++i){
+	for (int i = 0; i < int(number_sprites[number].sprites.size()); ++i){
 		PPU466::Sprite cur = number_sprites[number].sprites[i];
 		ppu->sprites[i+ppu_start_index].x = uint8_t(x_pos + float(8 * (i % number_sprites[0].row_count)) - x_offset);
 		ppu->sprites[i+ppu_start_index].y = uint8_t(y_pos - float(8 * (i / number_sprites[0].row_count)) + y_offset);

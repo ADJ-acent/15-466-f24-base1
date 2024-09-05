@@ -14,7 +14,7 @@ struct Number {
     void draw(uint8_t number);
 
     std::vector<AssetController::LoadedSprite> number_sprites;
-    uint8_t x_pos, y_pos,ppu_start_index, palette_index;
+    uint8_t ppu_start_index, x_pos, y_pos, palette_index;
     PPU466 *ppu;
 
     void set_pos(uint8_t x, uint8_t y);

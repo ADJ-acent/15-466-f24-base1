@@ -93,7 +93,7 @@ if (maek.OS === 'windows') {
 // objFileBase (optional): base name object file to produce (if not supplied, set to options.objDir + '/' + cppFile without the extension)
 //returns objFile: objFileBase + a platform-dependant suffix ('.o' or '.obj')
 const game_objs = [
-	maek.CPP('PNGConverter.cpp'), // comment out when not converting assets
+	//maek.CPP('PNGConverter.cpp'), // comment out when not converting assets
 	maek.CPP('Number.cpp'),
 	maek.CPP('CarrotController.cpp'),
 	maek.CPP('Actor.cpp'),
