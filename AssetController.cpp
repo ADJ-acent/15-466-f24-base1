@@ -3,6 +3,7 @@
 #include <filesystem>
 #include "read_write_chunk.hpp"
 #include "Actor.hpp"
+#include <algorithm>
 
 //#define ASSET_CONVERSION //only defined when we need to convert assets
 //converts pngs to easy to read format for PPU466
