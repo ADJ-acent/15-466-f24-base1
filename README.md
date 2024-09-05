@@ -6,7 +6,7 @@ Design: A viscious hamster that rolls around hunting for timid carrots, try to g
 
 Screen Shot:
 
-![Screen Shot](15-466-f24-base1/screenshot.png)
+![Screen Shot](screenshot.png)
 
 How the Asset Pipeline Works:
 
