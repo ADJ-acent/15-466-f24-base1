@@ -8,5 +8,4 @@ dist/game
 dist/game.exe
 maek-cache.json
 assets
-*.png
 !dist/assets

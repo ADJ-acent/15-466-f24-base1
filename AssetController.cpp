@@ -4,7 +4,7 @@
 #include "read_write_chunk.hpp"
 #include "Actor.hpp"
 
-#define ASSET_CONVERSION //only defined when we need to convert assets
+//#define ASSET_CONVERSION //only defined when we need to convert assets
 //converts pngs to easy to read format for PPU466
 // Global manager that loads everything, make sure all generated files are in the right place
 #ifdef ASSET_CONVERSION
@@ -117,9 +117,10 @@ void AssetController::load_animations()
     Hamster_Animations.push_back(load_animation(data_path("assets/tiles/hamRoll")));
     Carrot_Animations.push_back(load_animation(data_path("assets/tiles/carIdle")));
     // both place holders for walk and roll
-    Carrot_Animations.push_back(load_animation(data_path("assets/tiles/carIdle")));
-    Carrot_Animations.push_back(load_animation(data_path("assets/tiles/carIdle")));
-    
+    Carrot_Animations.push_back(std::vector<AssetController::LoadedSprite>());
+    Carrot_Animations.push_back(std::vector<AssetController::LoadedSprite>());
     Carrot_Animations.push_back(load_animation(data_path("assets/tiles/carDeath")));
+    // technically not an animation, but still
+    numbers = load_animation(data_path("assets/tiles/numbers"));
     
 }

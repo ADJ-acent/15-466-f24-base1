@@ -59,6 +59,7 @@ struct AssetController
 
     std::vector<std::vector<AssetController::LoadedSprite>> Hamster_Animations;
     std::vector<std::vector<AssetController::LoadedSprite>> Carrot_Animations;
+    std::vector<AssetController::LoadedSprite> numbers;
     AssetController::LoadedSprite Background_Sprites;
 
 };

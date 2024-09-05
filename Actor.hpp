@@ -5,7 +5,7 @@
 #include <vector>
 
 struct Actor {
-    Actor(float x, float y, PPU466* ppu);
+    Actor(uint8_t ppu_start_index, float x, float y, PPU466* ppu);
 
     struct Animation {
         uint8_t current_index;
@@ -29,6 +29,7 @@ struct Actor {
     std::vector<std::vector<AssetController::LoadedSprite>> animations;
     Animation current_animation;
     State current_state = death;
+    bool in_on_death = false;
 
     void load_animation(std::vector<std::vector<AssetController::LoadedSprite>> in_animation, uint8_t offset = 0);
 

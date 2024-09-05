@@ -2,20 +2,21 @@
 
 extern AssetController Asset_Controller;
 
-Actor::Actor(float x, float y, PPU466 *ppu):
-    ppu_start_index(0),
+Actor::Actor(uint8_t ppu_start_index, float x, float y, PPU466 *ppu):
+    ppu_start_index(ppu_start_index),
     x_pos(x),
     y_pos(y),
     ppu(ppu) 
 {
 }
 
+// offsets for multiple sprites at the same time
 void Actor::load_animation(std::vector<std::vector<AssetController::LoadedSprite>> in_animation, uint8_t offset)
 {
     assert(in_animation.size() > 0);
     animations = in_animation;
     palette_index = in_animation[0][0].sprites[0].attributes;
-    ppu_start_index = in_animation[0][0].tile_index + offset;
+    ppu_start_index = ppu_start_index + offset;
     tile_start_index = in_animation[0][0].tile_index;
     has_loaded_animation = true;
     set_current_animation(idle);
@@ -28,7 +29,8 @@ void Actor::update(float elapsed)
     if (time_since_last_frame >= current_animation.frame_time) {
         // updates the animation to the next frame
         time_since_last_frame -= current_animation.frame_time;
-        if (current_state == death && current_animation.current_index + 1 == current_animation.sprites.size()) {
+        if (current_state == death && current_animation.current_index + 1 == current_animation.sprites.size() && !in_on_death) {
+            in_on_death = true;
             on_death();
             return;
         }
@@ -61,6 +63,7 @@ void Actor::on_death()
 void Actor::set_current_animation(State state)
 {
     if (current_state == state) return;
+    if (state != death) in_on_death = false;
     current_state = state;
     current_animation.sprites = animations[state];
     current_animation.current_index = 0;

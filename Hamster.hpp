@@ -1,8 +1,8 @@
 #include "Actor.hpp"
 
 struct Hamster : Actor {
-    Hamster(float x, float y, PPU466* ppu, float speed) :
-        Actor(x, y, ppu),
+    Hamster(uint8_t ppu_start_index, float x, float y, PPU466* ppu, float speed) :
+        Actor(ppu_start_index, x, y, ppu),
         speed(speed),
         dash_top_speed(7*speed)
     {};

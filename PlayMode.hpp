@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <deque>
+#include "Number.hpp"
 
 struct PlayMode : Mode {
 	PlayMode();
@@ -33,4 +34,14 @@ struct PlayMode : Mode {
 
 	// carrots
 	CarrotController carrot_controller;
+
+	// UI numbers
+	float count_down = 60.0f;
+	Number timer_lower;
+	Number timer_upper;
+	Number score_lower;
+	Number score_upper;
+
+	// end game?
+	bool ended = false;
 };

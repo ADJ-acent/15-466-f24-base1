@@ -6,22 +6,16 @@ CarrotController::CarrotController(Hamster *hamster, PPU466 *ppu,
     hamster(hamster), 
     ppu(ppu),
     carrots{
-        Carrot(this, 0.f, 100.f, ppu),
-        Carrot(this, 100.f, 0.f, ppu),
-        Carrot(this, 150.f, 150.f, ppu),
-        Carrot(this, 0.f, 50.f, ppu),
-        Carrot(this, 200.f, 100.f, ppu),
-        Carrot(this, 100.f, 200.f, ppu),
+        Carrot(this, 4, 0.f, 100.f, ppu),
+        Carrot(this, 4, 100.f, 0.f, ppu),
+        Carrot(this, 4, 150.f, 150.f, ppu),
+        Carrot(this, 4, 0.f, 50.f, ppu),
+        Carrot(this, 4, 200.f, 100.f, ppu),
+        Carrot(this, 4, 100.f, 200.f, ppu),
     }
 {
     for (uint8_t i = 0; i< carrots.size(); ++i)
         carrots[i].load_animation(in_animation, i * 4);
-}
-
-void CarrotController::spawn_carrot(float x, float y)
-{
-    // Carrot new_carrot = Carrot(this, x, y, ppu);
-    // carrots.push_back(new_carrot);
 }
 
 void CarrotController::update(float elapsed)
@@ -141,6 +135,7 @@ void CarrotController::Carrot::update(float elapsed)
 void CarrotController::Carrot::on_death()
 {
     Actor::on_death();
+    controller->score++;
     bool others_dead = false;
     for (int8_t i = 0; i < controller->carrots.size(); ++i){
         if (controller->dead_carrots[i]) others_dead = true;

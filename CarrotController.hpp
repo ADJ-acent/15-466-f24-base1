@@ -6,8 +6,8 @@ struct CarrotController
 {
     CarrotController(Hamster* hamster, PPU466* ppu, std::vector<std::vector<AssetController::LoadedSprite>> in_animation);
     struct Carrot : Actor {
-        Carrot(CarrotController* controller, float x, float y, PPU466* ppu) : 
-            Actor(x, y, ppu),
+        Carrot(CarrotController* controller, uint8_t ppu_start_index, float x, float y, PPU466* ppu) : 
+            Actor(ppu_start_index, x, y, ppu),
             controller(controller)
             {};
         CarrotController* controller;
@@ -19,14 +19,13 @@ struct CarrotController
 
     Hamster* hamster;
     PPU466* ppu;
-    std::array<Carrot, 6> carrots; // have max of 6 carrots in the scene
+    std::array<Carrot, 6> carrots; // have max of 4 carrots in the scene
     std::array<bool, 6> dead_carrots{false, false, false, false, false, false};
     const float respawn_time = 2.0f;
     float since_respawn = 0.0f;
     const uint8_t eat_radius = 10;
     const uint8_t speed = 100;
-
-    void spawn_carrot(float x, float y);
+    uint8_t score = 0;
 
     void update(float elapsed);
     void draw();
