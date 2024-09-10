@@ -29,7 +29,7 @@ void CarrotController::update(float elapsed)
         }
         if (since_respawn > respawn_time) {
             if (respawn_index != carrots.size()) {
-                bool quadrant[2]{(uint8_t(hamster->x_pos) < 120), (uint8_t(hamster->y_pos) < 120)}; // false if hamster is in the left side, false if hamster is in the bottom
+                bool quadrant[2]{(uint8_t(int(hamster->x_pos)) < 120), (uint8_t(int(hamster->y_pos)) < 120)}; // false if hamster is in the left side, false if hamster is in the bottom
                 dead_carrots[respawn_index] = false;
                 carrots[respawn_index].set_current_animation(Actor::State::idle);
                 carrots[respawn_index].x_pos = float(quadrant[0] * 240);
